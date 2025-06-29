@@ -13,7 +13,7 @@ contract DeployFundMe is Script {
 
         vm.startBroadcast();
         FundMe fundMe = new FundMe( 
-            0x694AA1769357215DE4FAC081bf1f309aDC325306 // Sepolia ETH/USD Price Feed Address
+            ethUsdPriceFeedAddress // Use the address from HelperConfig
         );
         vm.stopBroadcast();
         return fundMe;
