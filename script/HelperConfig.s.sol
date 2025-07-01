@@ -24,7 +24,7 @@ contract HelperConfig is Script {
         } else if (block.chainid == 1) { // Mainnet
             activeNetworkConfig = getMainnetEthConfig();
         } else {
-            revert("Unsupported network");
+            activeNetworkConfig = getOrCreateAnvilEthConfig(); // Anvil is used for local testing
         }
     }
 
@@ -44,8 +44,11 @@ contract HelperConfig is Script {
         return ethConfig;
     }
 
-    function getAnvilEthConfig() public returns (NetworkConfig memory) {
+    function getOrCreateAnvilEthConfig() public returns (NetworkConfig memory) {
 
+        if (activeNetworkConfig.priceFeed != address(0)) {
+            return activeNetworkConfig;
+            }
 
         vm.startBroadcast();
         MockV3Aggregator mockPriceFeed = new MockV3Aggregator(DECIMALS, INITIAL_PRICE); // 2000 USD price for 1 ETH with 18 decimals
